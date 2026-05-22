@@ -3,13 +3,13 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>متجري الاحترافي</title>
+<title>متجري الإلكتروني</title>
 
 <style>
 body{
 margin:0;
 font-family:Arial;
-background:#0b1220;
+background:linear-gradient(135deg,#0b1220,#1e293b);
 color:white;
 direction:rtl;
 }
@@ -19,62 +19,47 @@ background:#00f5ff;
 color:black;
 padding:20px;
 text-align:center;
-font-size:24px;
+font-size:28px;
 font-weight:bold;
 }
 
 .container{
 display:flex;
-gap:20px;
 flex-wrap:wrap;
 justify-content:center;
-padding:20px;
+gap:20px;
+padding:30px;
 }
 
 .card{
 background:#111a2e;
-width:220px;
-padding:15px;
-border-radius:10px;
-text-align:center;
-cursor:pointer;
+width:250px;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 0 15px rgba(0,0,0,0.5);
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.05);
 }
 
 .card img{
 width:100%;
-border-radius:10px;
+height:180px;
+object-fit:cover;
+}
+
+.content{
+padding:15px;
+text-align:center;
 }
 
 .price{
 color:#00f5ff;
+font-size:18px;
+margin:10px 0;
 font-weight:bold;
-margin:5px 0;
-}
-
-/* نافذة الطلب */
-.modal{
-display:none;
-position:fixed;
-top:0;left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.8);
-justify-content:center;
-align-items:center;
-}
-
-.modal-content{
-background:white;
-color:black;
-padding:20px;
-border-radius:10px;
-width:300px;
-}
-
-input{
-width:100%;
-margin:5px 0;
-padding:8px;
 }
 
 button{
@@ -84,51 +69,51 @@ background:#00f5ff;
 border:none;
 cursor:pointer;
 font-weight:bold;
+border-radius:0 0 15px 15px;
+}
+
+button:hover{
+background:#00c2cc;
 }
 </style>
 </head>
 
 <body>
 
-<header>🛒 متجري الاحترافي</header>
+<header>
+🛒 متجري الإلكتروني
+</header>
 
 <div class="container">
 
-<!-- منتج -->
-<div class="card" onclick="openForm('منتج 1')">
-<img src="https://via.placeholder.com/250">
+<div class="card">
+<img src="https://via.placeholder.com/300x200">
+<div class="content">
 <h3>منتج 1</h3>
 <p class="price">2000 دج</p>
 </div>
-
+<button>شراء</button>
 </div>
 
-<!-- نافذة الطلب -->
-<div class="modal" id="modal">
-<div class="modal-content">
-
-<h3 id="productName">طلب المنتج</h3>
-
-<input type="text" placeholder="الاسم">
-<input type="text" placeholder="رقم الهاتف">
-<input type="text" placeholder="الولاية">
-
-<button onclick="alert('تم إرسال الطلب')">إرسال الطلب</button>
-<button onclick="closeForm()">إغلاق</button>
-
+<div class="card">
+<img src="https://via.placeholder.com/300x200">
+<div class="content">
+<h3>منتج 2</h3>
+<p class="price">3500 دج</p>
 </div>
+<button>شراء</button>
 </div>
 
-<script>
-function openForm(product){
-document.getElementById('modal').style.display='flex';
-document.getElementById('productName').innerText=product;
-}
+<div class="card">
+<img src="https://via.placeholder.com/300x200">
+<div class="content">
+<h3>منتج 3</h3>
+<p class="price">5000 دج</p>
+</div>
+<button>شراء</button>
+</div>
 
-function closeForm(){
-document.getElementById('modal').style.display='none';
-}
-</script>
+</div>
 
 </body>
 </html>
