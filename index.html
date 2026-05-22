@@ -3,7 +3,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>متجري الإلكتروني</title>
+<title>متجري المتطور</title>
 
 <style>
 body{
@@ -19,7 +19,7 @@ background:#00f5ff;
 color:black;
 padding:20px;
 text-align:center;
-font-size:28px;
+font-size:26px;
 font-weight:bold;
 }
 
@@ -28,7 +28,7 @@ display:flex;
 flex-wrap:wrap;
 justify-content:center;
 gap:20px;
-padding:30px;
+padding:20px;
 }
 
 .card{
@@ -36,30 +36,49 @@ background:#111a2e;
 width:250px;
 border-radius:15px;
 overflow:hidden;
-box-shadow:0 0 15px rgba(0,0,0,0.5);
+cursor:pointer;
 transition:0.3s;
 }
 
-.card:hover{
-transform:scale(1.05);
-}
+.card:hover{transform:scale(1.05);}
 
 .card img{
 width:100%;
-height:180px;
+height:170px;
 object-fit:cover;
 }
 
 .content{
-padding:15px;
+padding:10px;
 text-align:center;
 }
 
-.price{
-color:#00f5ff;
-font-size:18px;
-margin:10px 0;
-font-weight:bold;
+.price{color:#00f5ff;font-weight:bold;}
+
+/* نافذة الطلب */
+.modal{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+justify-content:center;
+align-items:center;
+}
+
+.box{
+background:white;
+color:black;
+padding:20px;
+border-radius:10px;
+width:300px;
+}
+
+input{
+width:100%;
+padding:8px;
+margin:5px 0;
 }
 
 button{
@@ -69,51 +88,124 @@ background:#00f5ff;
 border:none;
 cursor:pointer;
 font-weight:bold;
-border-radius:0 0 15px 15px;
 }
 
-button:hover{
-background:#00c2cc;
+button:hover{background:#00c2cc;}
+
+/* لوحة الطلبات */
+.admin{
+position:fixed;
+bottom:10px;
+left:10px;
+background:#00f5ff;
+color:black;
+padding:10px;
+cursor:pointer;
+font-weight:bold;
+border-radius:10px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-🛒 متجري الإلكتروني
-</header>
+<header>🛒 متجر متطور</header>
 
-<div class="container">
+<div class="container" id="products"></div>
 
-<div class="card">
-<img src="https://via.placeholder.com/300x200">
+<!-- نافذة الطلب -->
+<div class="modal" id="modal">
+<div class="box">
+
+<h3 id="pname"></h3>
+<p id="pprice"></p>
+
+<input id="name" placeholder="الاسم">
+<input id="phone" placeholder="الهاتف">
+<input id="city" placeholder="الولاية">
+
+<button onclick="sendOrder()">إرسال الطلب</button>
+<button onclick="closeModal()">إغلاق</button>
+
+</div>
+</div>
+
+<div class="admin" onclick="showOrders()">
+📦 الطلبات
+</div>
+
+<script>
+
+// منتجات جاهزة (يمكنك تعديلها فقط هنا)
+let products = [
+{name:"منتج 1", price:"2000 دج", img:"https://via.placeholder.com/300x200"},
+{name:"منتج 2", price:"3500 دج", img:"https://via.placeholder.com/300x200"},
+{name:"منتج 3", price:"5000 دج", img:"https://via.placeholder.com/300x200"}
+];
+
+// عرض المنتجات
+let container = document.getElementById("products");
+
+products.forEach((p,i)=>{
+container.innerHTML += `
+<div class="card" onclick="openModal(${i})">
+<img src="${p.img}">
 <div class="content">
-<h3>منتج 1</h3>
-<p class="price">2000 دج</p>
+<h3>${p.name}</h3>
+<p class="price">${p.price}</p>
 </div>
-<button>شراء</button>
-</div>
+</div>`;
+});
 
-<div class="card">
-<img src="https://via.placeholder.com/300x200">
-<div class="content">
-<h3>منتج 2</h3>
-<p class="price">3500 دج</p>
-</div>
-<button>شراء</button>
-</div>
+let selectedProduct="";
 
-<div class="card">
-<img src="https://via.placeholder.com/300x200">
-<div class="content">
-<h3>منتج 3</h3>
-<p class="price">5000 دج</p>
-</div>
-<button>شراء</button>
-</div>
+function openModal(i){
+selectedProduct = products[i];
+document.getElementById("pname").innerText = selectedProduct.name;
+document.getElementById("pprice").innerText = selectedProduct.price;
+document.getElementById("modal").style.display="flex";
+}
 
-</div>
+function closeModal(){
+document.getElementById("modal").style.display="none";
+}
+
+// حفظ الطلبات محليًا
+function sendOrder(){
+let order = {
+product:selectedProduct.name,
+price:selectedProduct.price,
+name:document.getElementById("name").value,
+phone:document.getElementById("phone").value,
+city:document.getElementById("city").value
+};
+
+let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+orders.push(order);
+localStorage.setItem("orders", JSON.stringify(orders));
+
+alert("تم إرسال الطلب بنجاح ✔️");
+closeModal();
+}
+
+// عرض الطلبات (لك أنت فقط)
+function showOrders(){
+let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+
+let text = "الطلبات:\n\n";
+
+orders.forEach(o=>{
+text += `المنتج: ${o.product}
+الاسم: ${o.name}
+الهاتف: ${o.phone}
+المدينة: ${o.city}
+-----------------\n`;
+});
+
+alert(text);
+}
+
+</script>
 
 </body>
 </html>
