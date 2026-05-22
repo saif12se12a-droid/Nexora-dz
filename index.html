@@ -1,0 +1,179 @@
+# Nexora-dz
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>متجر احترافي</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b1220;
+color:white;
+direction:rtl;
+}
+
+header{
+background:linear-gradient(90deg,#00f5ff,#6c63ff);
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.section{
+padding:20px;
+text-align:center;
+}
+
+input{
+padding:8px;
+margin:5px;
+width:200px;
+}
+
+button{
+padding:10px;
+background:#00f5ff;
+border:none;
+cursor:pointer;
+font-weight:bold;
+border-radius:8px;
+margin:5px;
+}
+
+.container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+padding:20px;
+}
+
+.card{
+background:#111a2e;
+width:220px;
+padding:15px;
+border-radius:10px;
+text-align:center;
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+.orderBox{
+background:#111a2e;
+margin:20px;
+padding:15px;
+border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>🛒 متجر احترافي كامل</header>
+
+<!-- إضافة منتجات -->
+<div class="section">
+<h3>➕ إضافة منتج</h3>
+
+<input id="name" placeholder="اسم المنتج">
+<input id="price" placeholder="السعر">
+<input id="img" placeholder="رابط الصورة">
+
+<button onclick="addProduct()">إضافة</button>
+</div>
+
+<!-- المنتجات -->
+<div class="container" id="products"></div>
+
+<!-- الطلبات -->
+<div class="orderBox">
+<h3>🧾 طلب شراء</h3>
+
+<p id="selected">لم يتم اختيار منتج</p>
+
+<input id="clientName" placeholder="اسم الزبون">
+<input id="city" placeholder="المدينة">
+
+<button onclick="sendOrder()">إرسال الطلب</button>
+
+<div id="orders"></div>
+</div>
+
+<script>
+
+// تحميل المنتجات من التخزين
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let selectedProduct = "";
+
+function render(){
+let box = document.getElementById("products");
+box.innerHTML = "";
+
+products.forEach((p,index)=>{
+box.innerHTML += `
+<div class="card">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p>${p.price} دج</p>
+<button onclick="selectProduct('${p.name}')">شراء</button>
+</div>
+`;
+});
+}
+
+function addProduct(){
+let name = document.getElementById("name").value;
+let price = document.getElementById("price").value;
+let img = document.getElementById("img").value;
+
+if(name=="" || price=="" || img==""){
+alert("اكمل المعلومات");
+return;
+}
+
+products.push({name,price,img});
+localStorage.setItem("products",JSON.stringify(products));
+
+render();
+
+document.getElementById("name").value="";
+document.getElementById("price").value="";
+document.getElementById("img").value="";
+}
+
+function selectProduct(name){
+selectedProduct = name;
+document.getElementById("selected").innerText = "المنتج: " + name;
+}
+
+function sendOrder(){
+let name = document.getElementById("clientName").value;
+let city = document.getElementById("city").value;
+
+if(selectedProduct=="" || name=="" || city==""){
+alert("اكمل المعلومات");
+return;
+}
+
+let orders = document.getElementById("orders");
+
+orders.innerHTML += `
+<p>📦 طلب: ${selectedProduct} | ${name} | ${city}</p>
+`;
+
+alert("تم إرسال الطلب ✔️");
+}
+
+render();
+
+</script>
+
+</body>
+</html>
+
