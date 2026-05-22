@@ -3,7 +3,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>متجر احترافي</title>
+<title>متجري الاحترافي</title>
 
 <style>
 body{
@@ -15,39 +15,19 @@ direction:rtl;
 }
 
 header{
-background:linear-gradient(90deg,#00f5ff,#6c63ff);
+background:#00f5ff;
+color:black;
 padding:20px;
 text-align:center;
 font-size:24px;
 font-weight:bold;
 }
 
-.section{
-padding:20px;
-text-align:center;
-}
-
-input{
-padding:8px;
-margin:5px;
-width:200px;
-}
-
-button{
-padding:10px;
-background:#00f5ff;
-border:none;
-cursor:pointer;
-font-weight:bold;
-border-radius:8px;
-margin:5px;
-}
-
 .container{
 display:flex;
+gap:20px;
 flex-wrap:wrap;
 justify-content:center;
-gap:20px;
 padding:20px;
 }
 
@@ -57,6 +37,7 @@ width:220px;
 padding:15px;
 border-radius:10px;
 text-align:center;
+cursor:pointer;
 }
 
 .card img{
@@ -64,116 +45,90 @@ width:100%;
 border-radius:10px;
 }
 
-.orderBox{
-background:#111a2e;
-margin:20px;
-padding:15px;
+.price{
+color:#00f5ff;
+font-weight:bold;
+margin:5px 0;
+}
+
+/* نافذة الطلب */
+.modal{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:white;
+color:black;
+padding:20px;
 border-radius:10px;
+width:300px;
+}
+
+input{
+width:100%;
+margin:5px 0;
+padding:8px;
+}
+
+button{
+width:100%;
+padding:10px;
+background:#00f5ff;
+border:none;
+cursor:pointer;
+font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<header>🛒 متجر احترافي كامل</header>
+<header>🛒 متجري الاحترافي</header>
 
-<!-- إضافة منتجات -->
-<div class="section">
-<h3>➕ إضافة منتج</h3>
+<div class="container">
 
-<input id="name" placeholder="اسم المنتج">
-<input id="price" placeholder="السعر">
-<input id="img" placeholder="رابط الصورة">
-
-<button onclick="addProduct()">إضافة</button>
+<!-- منتج -->
+<div class="card" onclick="openForm('منتج 1')">
+<img src="https://via.placeholder.com/250">
+<h3>منتج 1</h3>
+<p class="price">2000 دج</p>
 </div>
 
-<!-- المنتجات -->
-<div class="container" id="products"></div>
+</div>
 
-<!-- الطلبات -->
-<div class="orderBox">
-<h3>🧾 طلب شراء</h3>
+<!-- نافذة الطلب -->
+<div class="modal" id="modal">
+<div class="modal-content">
 
-<p id="selected">لم يتم اختيار منتج</p>
+<h3 id="productName">طلب المنتج</h3>
 
-<input id="clientName" placeholder="اسم الزبون">
-<input id="city" placeholder="المدينة">
+<input type="text" placeholder="الاسم">
+<input type="text" placeholder="رقم الهاتف">
+<input type="text" placeholder="الولاية">
 
-<button onclick="sendOrder()">إرسال الطلب</button>
+<button onclick="alert('تم إرسال الطلب')">إرسال الطلب</button>
+<button onclick="closeForm()">إغلاق</button>
 
-<div id="orders"></div>
+</div>
 </div>
 
 <script>
-
-// تحميل المنتجات من التخزين
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let selectedProduct = "";
-
-function render(){
-let box = document.getElementById("products");
-box.innerHTML = "";
-
-products.forEach((p,index)=>{
-box.innerHTML += `
-<div class="card">
-<img src="${p.img}">
-<h3>${p.name}</h3>
-<p>${p.price} دج</p>
-<button onclick="selectProduct('${p.name}')">شراء</button>
-</div>
-`;
-});
+function openForm(product){
+document.getElementById('modal').style.display='flex';
+document.getElementById('productName').innerText=product;
 }
 
-function addProduct(){
-let name = document.getElementById("name").value;
-let price = document.getElementById("price").value;
-let img = document.getElementById("img").value;
-
-if(name=="" || price=="" || img==""){
-alert("اكمل المعلومات");
-return;
+function closeForm(){
+document.getElementById('modal').style.display='none';
 }
-
-products.push({name,price,img});
-localStorage.setItem("products",JSON.stringify(products));
-
-render();
-
-document.getElementById("name").value="";
-document.getElementById("price").value="";
-document.getElementById("img").value="";
-}
-
-function selectProduct(name){
-selectedProduct = name;
-document.getElementById("selected").innerText = "المنتج: " + name;
-}
-
-function sendOrder(){
-let name = document.getElementById("clientName").value;
-let city = document.getElementById("city").value;
-
-if(selectedProduct=="" || name=="" || city==""){
-alert("اكمل المعلومات");
-return;
-}
-
-let orders = document.getElementById("orders");
-
-orders.innerHTML += `
-<p>📦 طلب: ${selectedProduct} | ${name} | ${city}</p>
-`;
-
-alert("تم إرسال الطلب ✔️");
-}
-
-render();
-
 </script>
 
 </body>
 </html>
-
